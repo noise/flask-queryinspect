@@ -23,7 +23,7 @@ class QueryInspect(object):
             self.init_app(app)
 
     def init_app(self, app):
-        app.config.setdefault('QUERYINSPECT_ENABLED', False)
+        app.config.setdefault('QUERYINSPECT_ENABLED', True)
         app.config.setdefault('QUERYINSPECT_HEADERS', True)
         app.config.setdefault('QUERYINSPECT_HEADERS_COMBINED', True)
         app.config.setdefault('QUERYINSPECT_LOG', True)

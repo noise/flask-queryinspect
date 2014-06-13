@@ -22,8 +22,6 @@ class TestQueryInspect(unittest.TestCase):
         #cls.app.config['SQLALCHEMY_ECHO'] = True
         db = SQLAlchemy(cls.app)
         cls.db = db
-
-        cls.app.config['QUERYINSPECT_ENABLED'] = True
         cls.qi = QueryInspect(cls.app)
 
         class TestModel(db.Model):

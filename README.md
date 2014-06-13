@@ -19,9 +19,7 @@ pip install Flask-QueryInspect
 
 ```python
 app = Flask(__name__)
-db = SQLAlchemy(cls.app)
-app.config['QUERYINSPECT_ENABLED'] = True
-qi = QueryInspect(cls.app)
+qi = QueryInspect(app)
 ```
 
 ## Configuration ##
