@@ -49,3 +49,18 @@ E.g.:
 INFO measure#qi.r_time=2.9ms, measure#qi.q_time=0.2ms,count#qi.reads=1, count#qi.writes=1, count#qi.conns=0
 ```
 
+## Example App ##
+
+Run the example server:
+
+```
+python example_app.py
+```
+
+And in another terminal:
+
+```
+curl -D - http://127.0.0.1:5000/
+```
+
+Notice the X-QueryInspect-Combined header.
