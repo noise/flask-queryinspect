@@ -15,7 +15,7 @@ from setuptools import setup
 
 setup(
     name='Flask-QueryInspect',
-    version='0.1',
+    version='0.1.1',
     url='https://github.com/noise/flask-queryinspect',
     license='MIT',
     author='Bret Barker',
