@@ -1,5 +1,7 @@
 # Flask QueryInspect Extension
 
+[![Build Status](https://travis-ci.org/noise/flask-queryinspect.svg?branch=master)](https://travis-ci.org/noise/flask-queryinspect?branch=master)
+
 Flask-QueryInspect is a Flask extension that provides metrics on SQL queries executed for each request.
 
 It assumes use of and relies upon SQLAlchemy as the underlying ORM.
