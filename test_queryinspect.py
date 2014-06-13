@@ -68,6 +68,6 @@ class TestQueryInspect(unittest.TestCase):
         self.app.config['QUERYINSPECT_HEADERS_COMBINED'] = False
         with self.app.test_client() as c:
             res = c.get('/slow')
-            r_time = res.headers['X-QueryInspect-Total-Request-Time']
-            self.assertTrue(90 < r_time > 110)
+            r_time = float(res.headers['X-QueryInspect-Total-Request-Time'])
+            self.assertTrue(90.0 < r_time > 110.0)
         self.app.config['QUERYINSPECT_HEADERS_COMBINED'] = True
