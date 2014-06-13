@@ -32,7 +32,7 @@ class TestQueryInspect(unittest.TestCase):
                 self.foo = foo
 
         db.create_all(app=cls.app)
-        for i in xrange(10):
+        for i in range(10):
             db.session.add(TestModel('test_%d' % i))
         db.session.commit()
 
