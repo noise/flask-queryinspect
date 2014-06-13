@@ -88,6 +88,6 @@ class QueryInspect(object):
             else:
                 response.headers['X-QueryInspect-Num-SQL-Queries'] = qi['reads'] + qi['writes']
                 #response.headers['X-QueryInspect-Duplicate-SQL-Queries'] = qi['dupes']
-                response.headers['X-QueryInspect-Total-SQL-Time'] = qi['q_time']
-                response.headers['X-QueryInspect-Total-Request-Time'] = qi['r_time']
+                response.headers['X-QueryInspect-Total-SQL-Time'] = qi['q_time_ms']
+                response.headers['X-QueryInspect-Total-Request-Time'] = qi['r_time_ms']
         return response
