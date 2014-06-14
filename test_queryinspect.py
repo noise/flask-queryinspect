@@ -9,6 +9,8 @@ log = logging.getLogger(__name__)
 
 
 class TestQueryInspect(unittest.TestCase):
+    app = None
+
     @classmethod
     def setUpClass(cls):
         logging.basicConfig(format='%(asctime)-15s %(levelname)s %(message)s')
@@ -53,23 +55,23 @@ class TestQueryInspect(unittest.TestCase):
             return u'Slow request'
 
     def test_noqueries(self):
-        with self.app.test_client() as c:
+        with TestQueryInspect.app.test_client() as c:
             res = c.get('/')
             log.debug(res.headers)
             self.assertTrue(res.headers['X-QueryInspect-Combined'].startswith('reads=0,writes=0,conns=0'))
 
     def test_mix(self):
-        with self.app.test_client() as c:
+        with TestQueryInspect.app.test_client() as c:
             res = c.get('/mix')
             log.debug(res.headers)
             self.assertTrue(res.headers['X-QueryInspect-Combined'].startswith('reads=1,writes=1'))
 
     def test_rtime(self):
-        self.app.config['QUERYINSPECT_HEADERS_COMBINED'] = False
-        with self.app.test_client() as c:
+        TestQueryInspect.app.config['QUERYINSPECT_HEADERS_COMBINED'] = False
+        with TestQueryInspect.app.test_client() as c:
             res = c.get('/slow')
             log.debug(res.headers)
             r_time = float(res.headers['X-QueryInspect-Total-Request-Time'])
             log.debug('r_time: %r', r_time)
             self.assertTrue(90.0 < r_time < 110.0)
-        self.app.config['QUERYINSPECT_HEADERS_COMBINED'] = True
+        TestQueryInspect.app.config['QUERYINSPECT_HEADERS_COMBINED'] = True
