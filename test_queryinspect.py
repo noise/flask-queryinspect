@@ -17,14 +17,13 @@ class TestQueryInspect(unittest.TestCase):
         logging.getLogger('flask_queryinspect').setLevel(logging.DEBUG)
         logging.getLogger('test_queryinspect').setLevel(logging.DEBUG)
 
-        cls.app = Flask(__name__)
-        cls.app.config['TESTING'] = True
+        TestQueryInspect.app = Flask(__name__)
+        TestQueryInspect.app.config['TESTING'] = True
 
-        cls.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://'
-        #cls.app.config['SQLALCHEMY_ECHO'] = True
-        db = SQLAlchemy(cls.app)
-        cls.db = db
-        cls.qi = QueryInspect(cls.app)
+        TestQueryInspect.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://'
+        #TestQueryInspect.app.config['SQLALCHEMY_ECHO'] = True
+        db = SQLAlchemy(TestQueryInspect.app)
+        QueryInspect(TestQueryInspect.app)
 
         class TestModel(db.Model):
             id = db.Column(db.Integer, primary_key=True)
@@ -33,23 +32,23 @@ class TestQueryInspect(unittest.TestCase):
             def __init__(self, foo):
                 self.foo = foo
 
-        db.create_all(app=cls.app)
+        db.create_all(app=TestQueryInspect.app)
         for i in range(10):
             db.session.add(TestModel('test_%d' % i))
         db.session.commit()
 
-        @cls.app.route('/')
+        @TestQueryInspect.app.route('/')
         def index():
             return u'No Queries'
 
-        @cls.app.route('/mix')
+        @TestQueryInspect.app.route('/mix')
         def mix():
             t = TestModel.query.first()
             t.foo = 'bar'
             db.session.commit()
             return u'Reads and writes'
 
-        @cls.app.route('/slow')
+        @TestQueryInspect.app.route('/slow')
         def slow():
             time.sleep(.1)
             return u'Slow request'
