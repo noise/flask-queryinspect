@@ -9,6 +9,7 @@ It assumes use of and relies upon SQLAlchemy as the underlying ORM.
 This extension was inspired by internal tooling of this sort, and
 then directly by https://github.com/dobarkod/django-queryinspect
 
+Source and documentation at https://github.com/noise/flask-queryinspect
 """
 from setuptools import setup
 
