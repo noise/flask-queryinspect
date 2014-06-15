@@ -11,8 +11,10 @@ log = logging.getLogger(__name__)
 class TestQueryInspect(unittest.TestCase):
     app = None
 
-    @classmethod
-    def setUpClass(cls):
+    def setUp(self):
+        if self.app:
+            return
+
         logging.basicConfig(format='%(asctime)-15s %(levelname)s %(message)s')
         logging.getLogger('flask_queryinspect').setLevel(logging.DEBUG)
         logging.getLogger('test_queryinspect').setLevel(logging.DEBUG)
