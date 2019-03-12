@@ -18,6 +18,8 @@ except ImportError:
 class QueryInspect(object):
 
     def __init__(self, app=None):
+        if app is None:
+            app = current_app
         self.app = app
         if app is not None:
             self.init_app(app)
@@ -36,17 +38,17 @@ class QueryInspect(object):
         listen(Engine, 'after_cursor_execute', self.after_cursor_execute)
 
     def connect(self, dbapi_connection, connection_record):
-        if not current_app or not current_app.config.get('QUERYINSPECT_ENABLED'):
+        if not self.app or not self.app.config.get('QUERYINSPECT_ENABLED'):
             return
         stack.queryinspect['conns'] += 1
 
     def before_cursor_execute(self, conn, cursor, statement, parameters, context, executemany):
-        if not current_app or not current_app.config.get('QUERYINSPECT_ENABLED'):
+        if not self.app or not self.app.config.get('QUERYINSPECT_ENABLED'):
             return
         stack.queryinspect['q_start'] = time.time()
 
     def after_cursor_execute(self, conn, cursor, statement, parameters, context, executemany):
-        if not current_app or not current_app.config.get('QUERYINSPECT_ENABLED'):
+        if not self.app or not self.app.config.get('QUERYINSPECT_ENABLED'):
             return
         stack.queryinspect['q_time'] += time.time() - stack.queryinspect['q_start']
         if statement.lower().startswith('select'):
@@ -55,7 +57,7 @@ class QueryInspect(object):
             stack.queryinspect['writes'] += 1
 
     def before_request(self, *kw1, **kw2):
-        if not current_app or not current_app.config.get('QUERYINSPECT_ENABLED'):
+        if not self.app or not self.app.config.get('QUERYINSPECT_ENABLED'):
             return
         stack.queryinspect = {
             'r_start': time.time(),
@@ -68,7 +70,7 @@ class QueryInspect(object):
         }
 
     def after_request(self, response, *kw1, **kw2):
-        if not current_app or not current_app.config.get('QUERYINSPECT_ENABLED'):
+        if not self.app or not self.app.config.get('QUERYINSPECT_ENABLED'):
             return
 
         qi = stack.queryinspect
@@ -76,12 +78,12 @@ class QueryInspect(object):
         qi['q_time_ms'] = round(qi['q_time'] * 1000, 1)
         qi['r_time_ms'] = round(qi['r_time'] * 1000, 1)
 
-        if current_app.config.get('QUERYINSPECT_LOG'):
+        if self.app.config.get('QUERYINSPECT_LOG'):
             log.info('measure#qi.r_time=%(r_time_ms).1fms, measure#qi.q_time=%(q_time_ms).1fms,' +
                      'count#qi.reads=%(reads)d, count#qi.writes=%(writes)d, count#qi.conns=%(conns)d', qi)
 
-        if current_app.config.get('QUERYINSPECT_HEADERS'):
-            if current_app.config.get('QUERYINSPECT_HEADERS_COMBINED'):
+        if self.app.config.get('QUERYINSPECT_HEADERS'):
+            if self.app.config.get('QUERYINSPECT_HEADERS_COMBINED'):
                 combo = ('reads=%(reads)d,writes=%(writes)d,conns=%(conns)d,q_time=%(q_time_ms).1fms,' +
                          'r_time=%(r_time_ms).1fms') % qi
                 response.headers['X-QueryInspect-Combined'] = combo
